@@ -1,20 +1,52 @@
-// login_screen.dart
 import 'package:flutter/material.dart';
-import 'package:sahabattani/screens/register_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+import 'login_success.dart';
+import 'register_screen.dart';
+import 'reset_password_screen.dart';
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  bool isLoading = false;
+
+  void _handleLogin() {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Email dan password tidak boleh kosong")),
+      );
+      return;
+    }
+
+    setState(() => isLoading = true);
+
+    // Simulasi proses login
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() => isLoading = false);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginSuccess()),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // Top Clip dan Logo
             ClipPath(
               clipper: TopClipper(),
               child: Container(
@@ -24,11 +56,7 @@ class LoginScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Gambar logo Anda di sini
-                      Image.asset(
-                        'assets/logo.png', // Ganti dengan path logo Anda
-                        height: 100,
-                      ),
+                      Image.asset('assets/logo.png', height: 100),
                       const SizedBox(height: 12),
                       const Text(
                         "SAHABAT PETANI",
@@ -47,14 +75,12 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
             const Text(
               "Login",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -77,7 +103,7 @@ class LoginScreen extends StatelessWidget {
                     controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      hintText: "Masukkan Password anda",
+                      hintText: "Masukkan Password Anda",
                       prefixIcon: const Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: Colors.grey[100],
@@ -90,15 +116,19 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Checkbox(value: true, onChanged: (val) {}),
+                      const Checkbox(value: true, onChanged: null),
                       const Text("Remember me"),
                       const Spacer(),
                       TextButton(
-                        onPressed: () {},
-                        child: const Text(
-                          "Lupa password",
-                          style: TextStyle(color: Colors.blue),
-                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ResetPasswordScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text("Lupa Kata Sandi?"),
                       ),
                     ],
                   ),
@@ -111,16 +141,21 @@ class LoginScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    onPressed: () {},
-                    child: const Text("Sign in"),
+                    onPressed: isLoading ? null : _handleLogin,
+                    child:
+                        isLoading
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text("Sign in"),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    children: const [
+                  const Row(
+                    children: [
                       Expanded(child: Divider()),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8),
-                        child: Text("Or Login with"),
+                        child: Text("Atau login dengan"),
                       ),
                       Expanded(child: Divider()),
                     ],
@@ -140,21 +175,15 @@ class LoginScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Tidak Punya Akun ? "),
+                      const Text("Tidak Punya Akun? "),
                       TextButton(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder:
-                                  (context) =>
-                                      const RegisterScreen(), // Menuju halaman pendaftaran
-                            ),
+                            MaterialPageRoute(builder: (_) => RegisterScreen()),
                           );
                         },
-                        child: const Text(
-                          "Daftar",
-                        ), // Tambahkan Text widget sebagai child dari TextButton
+                        child: const Text("Daftar"),
                       ),
                     ],
                   ),

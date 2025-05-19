@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:sahabattani/screens/register2_screen.dart';
+
+import 'register2_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +25,7 @@ class RegisterScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header dengan logo
+            // Header
             Container(
               width: double.infinity,
               decoration: const BoxDecoration(
@@ -48,13 +56,13 @@ class RegisterScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
                 children: [
-                  // Email / HP
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Email / No Hp Anda"),
                   ),
                   const SizedBox(height: 6),
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       hintText: "Masukkan Email Anda",
                       prefixIcon: Icon(Icons.mail_outline),
@@ -65,13 +73,13 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Nama Depan
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Nama Depan"),
                   ),
                   const SizedBox(height: 6),
                   TextField(
+                    controller: firstNameController,
                     decoration: InputDecoration(
                       hintText: "Nama Depan Anda",
                       filled: true,
@@ -81,13 +89,13 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Nama Belakang
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Nama Belakang"),
                   ),
                   const SizedBox(height: 6),
                   TextField(
+                    controller: lastNameController,
                     decoration: InputDecoration(
                       hintText: "Nama Belakang Anda",
                       filled: true,
@@ -97,16 +105,16 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Password
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Password"),
                   ),
                   const SizedBox(height: 6),
                   TextField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      hintText: "Masukkan Password anda",
+                      hintText: "Masukkan Password Anda",
                       prefixIcon: Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: fieldBgColor,
@@ -115,16 +123,16 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
 
-                  // Ulangi Password
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text("Ulangi Password"),
                   ),
                   const SizedBox(height: 6),
                   TextField(
+                    controller: confirmPasswordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      hintText: "Masukkan Password anda",
+                      hintText: "Ulangi Password Anda",
                       prefixIcon: Icon(Icons.lock_outline),
                       filled: true,
                       fillColor: fieldBgColor,
@@ -137,13 +145,13 @@ class RegisterScreen extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Page Indicator + Button Selanjutnya
+            // Navigation & Indicator
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Indikator 3 bar kecil
+                  // Page Indicator
                   Row(
                     children: [
                       Container(
@@ -176,10 +184,17 @@ class RegisterScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
+                      // Validasi bisa ditambahkan di sini
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegisterScreen2(),
+                          builder:
+                              (context) => RegisterScreen2(
+                                email: emailController.text,
+                                firstName: firstNameController.text,
+                                lastName: lastNameController.text,
+                                password: passwordController.text,
+                              ),
                         ),
                       );
                     },
